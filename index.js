@@ -1,12 +1,19 @@
 // Importing packages
 const express = require('express');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 require('dotenv/config');
 
 // Declaration/Execution
 const app = express();
 
+// Import router
+const usersRoute = require('./Router/router');
+
 // Middlewares : Executes everytime we enter the given route
+app.use(bodyParser.json());
+
+app.use('/users', usersRoute);
 // app.use('/users', ()=>{
 //     console.log('This is middleware');
 // });
@@ -14,10 +21,6 @@ const app = express();
 // ROUTES
 app.get('/', (req, res)=>{
     res.send('We are on Home Page');
-});
-
-app.get('/users', (req, res)=>{
-    res.send('We are on Users Page');
 });
 
 // Connect to DB
