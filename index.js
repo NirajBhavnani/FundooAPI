@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 require('dotenv/config');
+const cors = require('cors'); //For external API
 
 // Declaration/Execution
 const app = express();
@@ -11,12 +12,11 @@ const app = express();
 const usersRoute = require('./Router/router');
 
 // Middlewares : Executes everytime we enter the given route
+app.use(cors());
 app.use(bodyParser.json());
 
 app.use('/users', usersRoute);
-// app.use('/users', ()=>{
-//     console.log('This is middleware');
-// });
+
 
 // ROUTES
 app.get('/', (req, res)=>{
