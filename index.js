@@ -1,64 +1,29 @@
-var express = require('express');
-var app = express();
+// Importing packages
+const express = require('express');
+const mongoose = require('mongoose');
+require('dotenv/config');
 
-var mongoose = require('mongoose');
+// Declaration/Execution
+const app = express();
 
-var body_parser = require('body-parser');
+// Middlewares : Executes everytime we enter the given route
+// app.use('/users', ()=>{
+//     console.log('This is middleware');
+// });
 
-let response = {
-    "message": "Failure",
-    "result": "no data"
-}
-
-let arr = [
-    {
-        id: 1,
-        name: "express",
-        age: 12,
-        subject: "maths"
-    },
-    {
-        id: 2,
-        name: "mongo",
-        age: 12,
-        subject: "maths"
-    },
-    {
-        id: 3,
-        name: "mongoose",
-        age: 12,
-        subject: "maths"
-    },
-]
-
-app.use(express.json());
-
+// ROUTES
 app.get('/', (req, res)=>{
-    res.status(400).json(arr);
-})
+    res.send('We are on Home Page');
+});
 
-app.get('/:id', (req, res)=>{
-    let getOneData = arr.filter(e => e.id == req.params.id);
-    res.status(200).json(getOneData);
-})
+app.get('/users', (req, res)=>{
+    res.send('We are on Users Page');
+});
 
-app.get('/about', (req, res)=>{
-    res.status(200).json("About page");
-})
+// Connect to DB
+mongoose.connect(process.env.DB_CONNECTION, ()=>{
+    console.log("Connected to the database");
+});
 
-
-// listen is used to specify the port number
-app.listen("2000", (error)=>{
-    console.log("app is listening at port 2000")
-})
-
-
-
-mongoose.connect("mongodb://localhost:27017/Person", (err)=>{
-    if(err){
-        console.log("DB not connected");
-    }
-    else{
-        console.log("DB Connected");
-    }
-})
+// Boot up/Listen to the server
+app.listen(2000); //Add the port number as an argument
