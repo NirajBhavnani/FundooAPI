@@ -19,4 +19,4 @@ const userSchema = mongoose.Schema({
     },
 });
 
-module.exports = mongoose.model('Employees', userSchema);
+module.exports = mongoose.model('Employees', userSchema); //takes 2 params: 1-Model name in DB, 2-Schema

@@ -8,7 +8,7 @@ router.get('/', async (req, res)=>{
         const users = await User.find();
         res.json(users);
     } catch (error) {
-        res.json({message: error});
+        res.status(500).json({message: error});
     }
 });
 
@@ -23,49 +23,62 @@ router.post('/', async (req, res)=>{
 
     try{
         const regUser = await user.save() //save returns a promise
-        res.json(regUser);
+        res.status(201).json(regUser); //201 means successfully created an object
     }catch(err){
-        res.json({message: err});
+        res.status(400).json({message: err}); //400 means something wrong with user-input not server
     }
-
-    // another method
-
-    // .then(data=>{
-    //     res.json(data); //to show response on the screen
-    // })
-    // .catch(err=>{
-    //     res.json({message: err});
-    // })
 });
 
 // SPECIFIC USER FETCH
-router.get('/:userId', async (req, res)=>{
-    try {
-        const user = await User.findById(req.params.userId);
-        res.json(user);
-    } catch (error) {
-        res.json({message: error});
-    }
+router.get('/:userId', getUser, async (req, res)=>{
+    res.json(res.user);
 });
 
 // DELETE USER
-router.delete('/:userId', async (req, res)=>{
+router.delete('/:userId', getUser, async (req, res)=>{
     try {
-        const delUser = await User.remove({_id: req.params.userId});
-        res.json(delUser);
+        await res.user.remove();
+        res.json({message: "User deleted"});
     } catch (error) {
-        res.json({message: error});
+        res.status(500).json({message: error});
     }
 });
 
 // UPDATE USER
-router.patch('/:userId', async (req, res)=>{
+router.patch('/:userId', getUser, async (req, res)=>{
+    if(req.body.fName != null){
+        res.user.fName = req.body.fName;
+    }
+    if(req.body.lName != null){
+        res.user.lName = req.body.lName;
+    }
+    if(req.body.email != null){
+        res.user.email = req.body.email;
+    }
+    if(req.body.password != null){
+        res.user.password = req.body.password;
+    }
     try {
-        const updateUser = await User.updateOne({_id: req.params.userId}, {$set: {email: req.body.email}});
-        res.json(updateUser);
+        const updatedUser = await res.user.save();
+        res.json(updatedUser);
     } catch (error) {
-        res.json({message: error});
+        res.status(400).json({message: error});
     }
 });
+
+// MIDDLEWARE FUNCTION: To reuse the same code for user-fetch
+async function getUser(req, res, next){ //next: if we call this move on to the next section of code
+    let user;
+    try {
+        user = await User.findById(req.params.userId);
+        if(user==null){
+            return res.status(404).json({message: "Could not find user"}) //404: Could not find anything
+        }
+    } catch (error) {
+        return res.status(500).json({message: error}); //500: Something wrong with server
+    }
+    res.user = user;
+    next();
+}
 
 module.exports = router;
