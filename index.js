@@ -1,7 +1,7 @@
 // Importing packages
 const express = require('express');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
+const logger = require('./Logger/logger');
 require('dotenv/config');
 const cors = require('cors'); //For external API
 
@@ -28,10 +28,16 @@ app.get('/', (req, res)=>{
 mongoose.connect(process.env.DB_CONNECTION, {useNewUrlParser: true});
 
 // When there's a problem connecting to the DB
-db.on('error', (error)=> console.error(error));
+db.on('error', (error)=>{
+    logger.error(error);
+});
 
 // This code will execute only once whenever we are connected to the DB
-db.once('open', ()=> console.log("Connected to the database"));
+db.once('open', ()=>{
+    logger.info('Connected to the Database');
+});
 
 // Boot up/Listen to the server
-app.listen(2000, ()=> console.log("Server Started")); //Add the port number as an argument
+app.listen(2000, ()=>{
+    logger.info("Server Started") //Add the port number as an argument
+});
