@@ -1,7 +1,13 @@
 // Importing packages
 const express = require('express');
 const mongoose = require('mongoose');
+
 const logger = require('./Utils/logger');
+
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('./swagger.yaml');
+
 require('dotenv/config');
 const cors = require('cors'); //For external API
 
@@ -15,6 +21,7 @@ const usersRoute = require('./Router/router');
 // Middlewares : Executes everytime we enter the given route
 app.use(cors());
 app.use(express.json()); //Replaced body-parser with default express parser
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use('/users', usersRoute);
 

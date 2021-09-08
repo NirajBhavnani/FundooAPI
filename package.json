@@ -18,6 +18,7 @@
     "nodemon": "^2.0.12",
     "swagger-ui-express": "^4.1.6",
     "winston": "^3.3.3",
-    "winston-mongodb": "^5.0.7"
+    "winston-mongodb": "^5.0.7",
+    "yamljs": "^0.3.0"
   }
 }
