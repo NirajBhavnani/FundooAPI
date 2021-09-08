@@ -1,7 +1,7 @@
 // Importing packages
 const express = require('express');
 const mongoose = require('mongoose');
-const logger = require('./Logger/logger');
+const logger = require('./Utils/logger');
 require('dotenv/config');
 const cors = require('cors'); //For external API
 
