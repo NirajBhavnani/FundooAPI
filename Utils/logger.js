@@ -22,7 +22,7 @@ const logger = createLogger({
     }),
 
     new transports.File({
-      filename: "./Utils/Logs/infoLogs.log",
+      filename: "./Logs/infoLogs.log",
       level: "info",
       format: combine(timestamp({ format: "YYYY-MM-DD HH:mm:ss" }), json()),
     }),
