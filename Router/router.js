@@ -6,9 +6,9 @@ const userMiddleware = require('../Middlewares/userMiddleware');
 
 router.get('/', userController.getAllUsers);
 
-router.post('/register', userController.registerUser);
+router.post('/register', userMiddleware.validationRules(), userMiddleware.validateUser, userMiddleware.getUserByEmail, userController.registerUser);
 
-router.get('/login/:userId', userMiddleware.getUser, userController.loginUser);
+router.get('/login', userMiddleware.loginUser, userController.loginUser);
 
 router.delete('/delete/:userId', userMiddleware.getUser, userController.deleteUser);
 
