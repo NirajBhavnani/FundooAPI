@@ -1,21 +1,31 @@
 const { createLogger, format, transports } = require("winston");
-const { timestamp, combine, printf, json, colorize } = format;
+const { timestamp, combine, printf, json, colorize, errors } = format;
 require("winston-mongodb");
 require("dotenv/config");
 
 // Custom format for console
-const logFormat = printf(({ level, message, timestamp }) => {
-  return `${timestamp} ${level}: ${message}`;
+const logFormat = printf(({ level, message, timestamp, stack }) => {
+  return `${timestamp} ${level}: ${stack || message}`;
 });
 
 const logger = createLogger({
   level: "verbose",
 
   transports: [
-    new transports.Console({format: combine(colorize(), timestamp({ format: "YYYY-MM-DD HH:mm:ss" }), logFormat)}),
+    new transports.Console({
+      format: combine(
+        colorize(),
+        timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+        errors({ stack: true }),
+        logFormat
+      ),
+    }),
 
-    new transports.File({ filename: "./Logger/infoLogs.log", level: "info" , 
-    format: combine(timestamp({ format: "YYYY-MM-DD HH:mm:ss" }), json()),}),
+    new transports.File({
+      filename: "./Logger/infoLogs.log",
+      level: "info",
+      format: combine(timestamp({ format: "YYYY-MM-DD HH:mm:ss" }), json()),
+    }),
 
     new transports.MongoDB({
       level: "error",
