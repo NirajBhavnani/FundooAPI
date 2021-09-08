@@ -27,6 +27,18 @@ const logger = createLogger({
       format: combine(timestamp({ format: "YYYY-MM-DD HH:mm:ss" }), json()),
     }),
 
+    new transports.File({
+      filename: "./Logs/verboseLogs.log",
+      level: "verbose",
+      format: combine(timestamp({ format: "YYYY-MM-DD HH:mm:ss" }), json()),
+    }),
+
+    new transports.File({
+      filename: "./Logs/errorLogs.log",
+      level: "error",
+      format: combine(timestamp({ format: "YYYY-MM-DD HH:mm:ss" }), json()),
+    }),
+
     new transports.MongoDB({
       level: "error",
       db: process.env.DB_CONNECTION,
