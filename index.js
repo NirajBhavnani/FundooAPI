@@ -17,6 +17,7 @@ const db = mongoose.connection; //it is used for some events to run when our dat
 
 // Import router
 const usersRoute = require('./Router/router');
+const notesRoute = require('./Router/notesRouter');
 
 // Middlewares : Executes everytime we enter the given route
 app.use(cors());
@@ -24,6 +25,7 @@ app.use(express.json()); //Replaced body-parser with default express parser
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use('/users', usersRoute);
+app.use('/notes', notesRoute);
 
 
 // ROUTES
