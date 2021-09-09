@@ -22,7 +22,7 @@ FundooAPI
 │       notes.js
 │       user.js
 │
-└───Router      
+├───Router      
 │       noteRouter.js
 │       router.js
 │
@@ -34,10 +34,10 @@ FundooAPI
 * 1_Express_Kickoff: Fundamentals of express and mongoose
 * 2_Basics: Understanding middlewares and improving routes usage
 * 3_Router_Models: Creating Router and Models directories as per MVC architecture
-* 4_CRUD_User
-* 5_CRUD_User_Middleware
-* 6_MVC_Login_Register
-* 7_WinstonLogger
-* 8_ExpressValidator
-* 9_Swagger
-* 10_NotesAPI
+* 4_CRUD_User: Performed CRUD operations on User Model
+* 5_CRUD_User_Middleware: Performed CRUD operations using Middleware
+* 6_MVC_Login_Register: More specific MVC pattern followed and authentication as well as registration of User is implemented
+* 7_WinstonLogger: Winston Logger is implemented to replace console.log and to store the logs in files and mongodb
+* 8_ExpressValidator: express-validator is used for the server-side validation
+* 9_Swagger: Swagger functionality is integrated for maintaining documentation
+* 10_NotesAPI: Notes schema is generated and CRUD operations are performed.
