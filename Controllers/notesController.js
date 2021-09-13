@@ -22,8 +22,6 @@ let notesController = {
       title: req.body.title,
       description: req.body.description,
       color: req.body.color,
-    //   isArchived: req.body.isArchived,
-    //   isDeleted: req.body.isDeleted,
     });
 
     console.log(newNote);
@@ -53,7 +51,7 @@ async isDeletedNote(req, res) {
     try {
       const updatedNote = await res.note.save();
       res.json(updatedNote);
-      logger.verbose(`Status: ${res.statusCode}: Note updated`);
+      logger.verbose(`Status: ${res.statusCode}: Note updated: (isDeleted)`);
     } catch (error) {
       logger.error(`Status: 400: ${error.message}`);
       res.status(400).json({ message: error });
@@ -68,7 +66,27 @@ async isArchivedNote(req, res) {
     try {
       const updatedNote = await res.note.save();
       res.json(updatedNote);
-      logger.verbose(`Status: ${res.statusCode}: Note updated`);
+      logger.verbose(`Status: ${res.statusCode}: Note updated: (isArchived)`);
+    } catch (error) {
+      logger.error(`Status: 400: ${error.message}`);
+      res.status(400).json({ message: error });
+    }
+  },
+
+  async updateNote(req, res) {
+    if (req.body.title != null) {
+      res.note.title = req.body.title;
+    }
+    if (req.body.description != null) {
+      res.note.description = req.body.description;
+    }
+    if (req.body.color != null) {
+      res.note.color = req.body.color;
+    }
+    try {
+      const updatedNote = await res.note.save();
+      res.json(updatedNote);
+      logger.verbose(`Status: ${res.statusCode}: Note details updated`);
     } catch (error) {
       logger.error(`Status: 400: ${error.message}`);
       res.status(400).json({ message: error });

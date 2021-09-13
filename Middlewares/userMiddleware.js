@@ -1,6 +1,7 @@
 const User = require("../Models/user");
 const { check, validationResult } = require("express-validator");
 const logger = require("../Utils/logger");
+const authMiddleware = require("./authentication");
 
 let userMiddleware = {
   // MIDDLEWARE FUNCTION: To reuse the same code for user-fetch
@@ -41,13 +42,14 @@ let userMiddleware = {
         email: req.body.email,
         password: req.body.password,
       });
+
+      // Calling this middleware function to avoid the usage of jwt in this file
+      authMiddleware.createToken(req, res, user);
+      next();
     } catch (error) {
       logger.error(`Status: ${res.statusCode}: ${error.message}`);
       return res.status(500).json({ message: error.message });
     }
-
-    res.user = user;
-    next();
   },
 
   validationRules() {
@@ -88,9 +90,11 @@ let userMiddleware = {
       const extractedErrors = [];
       errors
         .array()
-        .map(err => extractedErrors.push({ [err.param]: err.msg }));
+        .map((err) => extractedErrors.push({ [err.param]: err.msg }));
       // console.log(errors);
-      logger.error(`Status: 422: ${JSON.stringify({errors: extractedErrors})}`);
+      logger.error(
+        `Status: 422: ${JSON.stringify({ errors: extractedErrors })}`
+      );
       return res.status(422).json({ message: extractedErrors });
     }
   },

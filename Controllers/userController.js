@@ -48,11 +48,11 @@ let userController = {
   async loginUser(req, res) {
     // return res.json(res.user);
     try {
-      if (res.user.length != 0) {
+      if (res.user) {
         logger.verbose(
           `Status: ${res.statusCode}: User logged in successfully`
         );
-        res.status(200).json(res.user);
+        res.status(200).json({...res.user[0]['_doc'], accessToken: req.accessToken});
       } else {
         logger.error(`Status: 404: User not found`);
         return res.status(404).json({ message: "User not found" });
