@@ -1,10 +1,12 @@
+require("dotenv/config");
 const jwt = require("jsonwebtoken");
 
 let authMiddleware = {
   createToken(_req, _res, _object) {
     const accessToken = jwt.sign(
-      JSON.stringify(_object),
-      process.env.ACCESS_TOKEN_SECRET
+      {id: this._object}, //passing it as a json object since : Set the payload as an object if you want to be able to set the expiresIn option
+      process.env.ACCESS_TOKEN_SECRET,
+      {expiresIn: "24h"}
     );
     _res.user = _object;
     _req.accessToken = accessToken;
