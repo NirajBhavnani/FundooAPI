@@ -43,3 +43,4 @@ FundooAPI
 * 9_Swagger: Swagger functionality is integrated for maintaining documentation
 * 10_NotesAPI: Notes schema is generated and CRUD operations are performed.
 * 11_JWT: JWT(Token) Generation and Authentication is implemented in user schema as well as notes schema.
+* 12_ForgetResetPassword: Bcrypt package implemented with minor changes to loginUser and updateUser functionality 

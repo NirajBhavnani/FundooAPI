@@ -1,5 +1,6 @@
 const User = require("../Models/user"); //Accessing our created model
 const logger = require("../Utils/logger");
+const bcrypt = require("bcrypt");
 
 let userController = {
   //FETCHING ALL THE REGISTERED USERS
@@ -18,11 +19,13 @@ let userController = {
 
   //REGISTERS A USER
   async registerUser(req, res) {
+    // Hashing is a one way communication
+    const hashedPassword = await bcrypt.hash(req.body.password, 10); //Salt===Cost factor and higher the cost factor, more will be the hashing rounds
     const newUser = new User({
       fName: req.body.fName,
       lName: req.body.lName,
       email: req.body.email,
-      password: req.body.password,
+      password: hashedPassword,
     });
 
     console.log(newUser);
@@ -52,7 +55,9 @@ let userController = {
         logger.verbose(
           `Status: ${res.statusCode}: User logged in successfully`
         );
-        res.status(200).json({...res.user[0]['_doc'], accessToken: req.accessToken});
+        res
+          .status(200)
+          .json({ ...res.user["_doc"], accessToken: req.accessToken });
       } else {
         logger.error(`Status: 404: User not found`);
         return res.status(404).json({ message: "User not found" });
@@ -77,6 +82,7 @@ let userController = {
 
   // UPDATE USER
   async updateUser(req, res) {
+    const hashedUpdatedPassword = await bcrypt.hash(req.body.password, 10);
     if (req.body.fName != null) {
       res.user.fName = req.body.fName;
     }
@@ -87,7 +93,7 @@ let userController = {
       res.user.email = req.body.email;
     }
     if (req.body.password != null) {
-      res.user.password = req.body.password;
+      res.user.password = hashedUpdatedPassword;
     }
     try {
       const updatedUser = await res.user.save();

@@ -2,6 +2,7 @@ const User = require("../Models/user");
 const { check, validationResult } = require("express-validator");
 const logger = require("../Utils/logger");
 const authMiddleware = require("./authentication");
+const bcrypt = require("bcrypt");
 
 let userMiddleware = {
   // MIDDLEWARE FUNCTION: To reuse the same code for user-fetch
@@ -38,16 +39,24 @@ let userMiddleware = {
   async loginUser(req, res, next) {
     let user;
     try {
-      user = await User.find({
+      // findOne(): if query matches, first document is returned, otherwise null.
+      user = await User.findOne({
         email: req.body.email,
-        password: req.body.password,
       });
 
-      // Calling this middleware function to avoid the usage of jwt in this file
-      authMiddleware.createToken(req, res, user);
-      next();
+      const pwdMatch = await bcrypt.compare(req.body.password, user.password); //1st: Actual password, 2nd: Hashed password
+
+      if (pwdMatch) {
+        // Calling this middleware function to avoid the usage of jwt in this file
+        authMiddleware.createToken(req, res, user);
+        next();
+      } else {
+        logger.error(
+          `PASSWORD MISMATCH`
+        );
+        return res.status(500).json({ message: "Password Mismatch" });
+      }
     } catch (error) {
-      logger.error(`Status: ${res.statusCode}: ${error.message}`);
       return res.status(500).json({ message: error.message });
     }
   },
