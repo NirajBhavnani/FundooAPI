@@ -29,6 +29,7 @@ FundooAPI
 │
 └───Utils
         logger.js
+        nodemailer.js
 ```
 
 ### Branches :
