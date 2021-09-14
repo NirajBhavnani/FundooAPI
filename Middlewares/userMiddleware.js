@@ -26,7 +26,7 @@ let userMiddleware = {
   async getUserByEmail(req, res, next) {
     let user;
     try {
-      user = await User.find({ email: req.body.email });
+      user = await User.findOne({ email: req.body.email });
     } catch (error) {
       logger.error(`Status: ${res.statusCode}: ${error.message}`);
       return res.status(500).json({ message: error.message });
