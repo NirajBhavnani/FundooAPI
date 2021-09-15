@@ -15,7 +15,6 @@ let authMiddleware = {
   authenticateToken(req, res, next) {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
-    console.log(authHeader);
 
     if (token == null)
       return res.status(401).json({ message: "User have no access" }); //401: Token not sent

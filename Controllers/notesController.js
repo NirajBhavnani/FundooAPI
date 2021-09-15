@@ -18,13 +18,13 @@ let notesController = {
 
   //CREATE A NOTE
   async addNote(req, res) {
+    let noteAuthor = req.user.id["email"]; //FETCHING EMAIL FROM VERIFIED TOKEN
     const newNote = new Notes({
       title: req.body.title,
       description: req.body.description,
       color: req.body.color,
+      author: noteAuthor
     });
-
-    console.log(newNote);
 
     if (res.note.length != 0) {
       logger.error("NOTE ALREADY EXISTS");
@@ -74,6 +74,7 @@ async isArchivedNote(req, res) {
   },
 
   async updateNote(req, res) {
+    let noteAuthor = req.user.id["email"];
     if (req.body.title != null) {
       res.note.title = req.body.title;
     }
@@ -83,6 +84,9 @@ async isArchivedNote(req, res) {
     if (req.body.color != null) {
       res.note.color = req.body.color;
     }
+    if (noteAuthor != null) {
+      res.note.author = noteAuthor;
+    }
     try {
       const updatedNote = await res.note.save();
       res.json(updatedNote);
@@ -90,6 +94,34 @@ async isArchivedNote(req, res) {
     } catch (error) {
       logger.error(`Status: 400: ${error.message}`);
       res.status(400).json({ message: error });
+    }
+  },
+
+  // FETCH ALL DELETED NOTES
+  async getAllDeletedNotes(req, res) {
+    try {
+      const deletedNotes = await Notes.find({isDeleted: 'true'});
+      logger.verbose(
+        `Status: ${res.statusCode}: Successfully fetched all deleted notes`
+      );
+      return res.status(200).json(deletedNotes);
+    } catch (error) {
+      logger.error(`Status: ${res.statusCode}: ${error.message}`);
+      return res.status(500).json({ message: error });
+    }
+  },
+
+  // FETCH ALL ARCHIVED NOTES
+  async getAllArchivedNotes(req, res) {
+    try {
+      const archivedNotes = await Notes.find({isArchived: 'true'});
+      logger.verbose(
+        `Status: ${res.statusCode}: Successfully fetched all archived notes`
+      );
+      return res.status(200).json(archivedNotes);
+    } catch (error) {
+      logger.error(`Status: ${res.statusCode}: ${error.message}`);
+      return res.status(500).json({ message: error });
     }
   },
 };

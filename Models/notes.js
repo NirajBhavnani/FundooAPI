@@ -21,6 +21,10 @@ const notesSchema = mongoose.Schema({
         type: Boolean,
         default: false,
       },
+      author: {
+        type: String,
+        required: true,
+      }
 });
 
 module.exports = mongoose.model('Notes', notesSchema);
