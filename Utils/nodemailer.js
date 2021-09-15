@@ -14,10 +14,10 @@ nodemailerFunctions = {
         });
         
         const options= {
-            from: "'Lucifer Morningstar' <nrjbhavnani@gmail.com>",
+            from: "'Fundoo API Admin' <nrjbhavnani@gmail.com>",
             to: "neerajbhavnani24@gmail.com",
-            subject: "Hello Detective!!",
-            html: "<b>What is it you desire?</b> <br> <a href='https://youtu.be/ueMwVGBwqRo'>CLICK FOR DESIRES</a>"
+            subject: "Reset Password Link for Fundoo API",
+            html: `<b>Reset your password: </b> <br> <a href='${res.url}'>RESET</a> <br> Access Token: ${res._token}`
         };
         
         await transporter.sendMail(options, (error, info) => {

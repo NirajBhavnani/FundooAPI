@@ -2,6 +2,7 @@ const User = require("../Models/user"); //Accessing our created model
 const logger = require("../Utils/logger");
 const bcrypt = require("bcrypt");
 const user = require("../Models/user");
+const authMiddleware = require("../Middlewares/authentication");
 
 let userController = {
   //FETCHING ALL THE REGISTERED USERS
@@ -107,13 +108,18 @@ let userController = {
   },
 
   // FORGOT PASSWORD
-  async forgotPassword(req, res, next){
+  async forgotPassword(req, res, next) {
     try {
-      if(res.user){
-        res.status(200).json({email: res.user["email"], message: "Link Sent to the mail"});
+      if (res.user) {
+        let _token = req.accessToken;
+        let url = `http://localhost:2000/users/reset/${req.accessToken}`;
+        res.url = url;
+        res._token = _token;
+        res
+          .status(200)
+          .json({ email: res.user, message: "Link Sent to the mail" });
         next();
-      }
-      else {
+      } else {
         logger.error(`Status: 404: Email not found`);
         return res.status(404).json({ message: "Email not found" });
       }
@@ -124,7 +130,7 @@ let userController = {
   },
 
   // RESET PASSWORD
-  async resetPassword(req, res, next){
+  async resetPassword(req, res, next) {
     const hashedUpdatedPassword = await bcrypt.hash(req.body.password, 10);
     if (req.body.password != null) {
       res.user.password = hashedUpdatedPassword;
@@ -137,7 +143,7 @@ let userController = {
       logger.error(`Status: 400: ${error.message}`);
       res.status(400).json({ message: error });
     }
-  }
+  },
 };
 
 module.exports = userController;

@@ -51,11 +51,46 @@ let userMiddleware = {
         authMiddleware.createToken(req, res, user);
         next();
       } else {
-        logger.error(
-          `PASSWORD MISMATCH`
-        );
+        logger.error(`PASSWORD MISMATCH`);
         return res.status(500).json({ message: "Password Mismatch" });
       }
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  },
+
+  async forgotPassword(req, res, next) {
+    let user;
+    try {
+      user = await User.findOne({
+        email: req.body.email,
+      });
+      if (user != null) {
+        console.log("user email", user["email"]);
+        authMiddleware.createToken(req, res, user["email"]);
+
+        next();
+      } else {
+        logger.error(`No specific user`);
+        return res.status(500).json({ message: "No specific user" });
+      }
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  },
+
+  async resetPassword(req, res, next) {
+    authMiddleware.verifyResetTokenAndFetchEmail(req, res); //email is passed in req.email
+    console.log(req.email);
+
+    let user;
+    try {
+      user = await User.findOne({
+        email: req.email,
+      });
+
+      res.user = user;
+      next();
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }
