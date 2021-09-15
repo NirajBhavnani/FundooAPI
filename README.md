@@ -46,3 +46,4 @@ FundooAPI
 * 11_JWT: JWT(Token) Generation and Authentication is implemented in user schema as well as notes schema.
 * 12_ForgetResetPassword: Bcrypt package, forgot and reset password (nodemailer) functionalities added.
 * 13_JWT_VerifiedReset: Forgot and reset password functionalities are improved with JWT Verfication.
+* 14_FinalModifications: Notes schema modified, get functionalities of trash and archive, alterations in create and update note.
