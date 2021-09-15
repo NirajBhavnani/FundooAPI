@@ -3,7 +3,6 @@ const router = express.Router();
 
 const userController = require('../Controllers/userController');
 const userMiddleware = require('../Middlewares/userMiddleware');
-const authMiddleware = require('../Middlewares/authentication');
 const nodemailerFunctions = require('../Utils/nodemailer');
 
 // FETCH ALL
@@ -25,9 +24,7 @@ router.patch('/update/:userId', userMiddleware.getUser, userController.updateUse
 // FORGOT PASSWORD
 router.post('/forgot', userMiddleware.forgotPassword, userController.forgotPassword, nodemailerFunctions.sendMail);
 
-// // RESET PASSWORD
-// router.patch('/reset/', userMiddleware.getUserByEmail);
+// RESET PASSWORD
 
-// RESET VERIFY
 router.patch('/reset/:resetToken', userMiddleware.resetPassword, userController.resetPassword);
 module.exports = router;
