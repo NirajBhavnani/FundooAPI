@@ -31,8 +31,9 @@ let userController = {
     });
 
     console.log(newUser);
+    console.log(res.newUser);
 
-    if (res.user.length != 0) {
+    if (res.newUser) {
       logger.error("USER ALREADY EXISTS");
       res.status(422).json({ message: "User Data already exists" }); //422 means Unprocessable
     } else {
@@ -84,7 +85,6 @@ let userController = {
 
   // UPDATE USER
   async updateUser(req, res) {
-    const hashedUpdatedPassword = await bcrypt.hash(req.body.password, 10);
     if (req.body.fName != null) {
       res.user.fName = req.body.fName;
     }
@@ -95,6 +95,7 @@ let userController = {
       res.user.email = req.body.email;
     }
     if (req.body.password != null) {
+      const hashedUpdatedPassword = await bcrypt.hash(req.body.password, 10);
       res.user.password = hashedUpdatedPassword;
     }
     try {
@@ -131,8 +132,8 @@ let userController = {
 
   // RESET PASSWORD
   async resetPassword(req, res, next) {
-    const hashedUpdatedPassword = await bcrypt.hash(req.body.password, 10);
     if (req.body.password != null) {
+      const hashedUpdatedPassword = await bcrypt.hash(req.body.password, 10);
       res.user.password = hashedUpdatedPassword;
     }
     try {

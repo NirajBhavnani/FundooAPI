@@ -5,7 +5,7 @@ let notesController = {
   // FETCH ALL NOTES
   async getAllNotes(req, res) {
     try {
-      const notes = await Notes.find({author: req.user.id.email});
+      const notes = await Notes.find({author: res.user.id.email});
       logger.verbose(
         `Status: ${res.statusCode}: Successfully fetched all notes`
       );
@@ -18,7 +18,7 @@ let notesController = {
 
   //CREATE A NOTE
   async addNote(req, res) {
-    let noteAuthor = req.user.id["email"]; //FETCHING EMAIL FROM VERIFIED TOKEN
+    let noteAuthor = res.user.id["email"]; //FETCHING EMAIL FROM VERIFIED TOKEN
     const newNote = new Notes({
       title: req.body.title,
       description: req.body.description,
@@ -74,7 +74,7 @@ async isArchivedNote(req, res) {
   },
 
   async updateNote(req, res) {
-    let noteAuthor = req.user.id["email"];
+    let noteAuthor = res.user.id["email"];
     if (req.body.title != null) {
       res.note.title = req.body.title;
     }
@@ -100,7 +100,7 @@ async isArchivedNote(req, res) {
   // FETCH ALL DELETED NOTES
   async getAllDeletedNotes(req, res) {
     try {
-      const deletedNotes = await Notes.find({isDeleted: 'true'});
+      const deletedNotes = await Notes.find({isDeleted: 'true', author: res.user.id.email});
       logger.verbose(
         `Status: ${res.statusCode}: Successfully fetched all deleted notes`
       );
@@ -114,7 +114,7 @@ async isArchivedNote(req, res) {
   // FETCH ALL ARCHIVED NOTES
   async getAllArchivedNotes(req, res) {
     try {
-      const archivedNotes = await Notes.find({isArchived: 'true'});
+      const archivedNotes = await Notes.find({isArchived: 'true', author: res.user.id.email});
       logger.verbose(
         `Status: ${res.statusCode}: Successfully fetched all archived notes`
       );

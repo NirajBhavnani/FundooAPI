@@ -21,7 +21,7 @@ let authMiddleware = {
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
       if (err) return res.sendStatus(403); //403: Token no longer valid and you don't have access
-      req.user = user;
+      res.user = user;
       next();
     });
   },

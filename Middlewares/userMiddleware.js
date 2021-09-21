@@ -32,7 +32,7 @@ let userMiddleware = {
       return res.status(500).json({ message: error.message });
     }
 
-    res.user = user;
+    res.newUser = user;
     next();
   },
 
