@@ -5,7 +5,7 @@ let notesController = {
   // FETCH ALL NOTES
   async getAllNotes(req, res) {
     try {
-      const notes = await Notes.find();
+      const notes = await Notes.find({author: req.user.id.email});
       logger.verbose(
         `Status: ${res.statusCode}: Successfully fetched all notes`
       );
