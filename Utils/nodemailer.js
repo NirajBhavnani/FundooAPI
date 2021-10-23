@@ -17,7 +17,7 @@ nodemailerFunctions = {
             from: "'Fundoo API Admin' <nrjbhavnani@gmail.com>",
             to: "neerajbhavnani24@gmail.com",
             subject: "Reset Password Link for Fundoo API",
-            html: `<b>Reset your password: </b> <br> <a href='${res.url}'>RESET</a> <br> Access Token: ${res._token}`
+            html: `<b>Reset your password: </b> <br> <a href='http://localhost:8080/reset/${res._token}'>RESET</a> <br> Access Token: ${res._token}`
         };
         
         await transporter.sendMail(options, (error, info) => {
